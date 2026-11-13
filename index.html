@@ -601,8 +601,8 @@
   }
   /* «Режимы» — тот же размер, слева от «Играть» */
   .screen.menu .link.modebtn{
-    left:auto;margin:0;
-    right:calc(env(safe-area-inset-right,0px) + 16px + var(--btnW,180px) + 12px);
+    right:auto;margin:0;
+    left:calc(env(safe-area-inset-left,0px) + 16px);
     bottom:calc(env(safe-area-inset-bottom,0px) + 16px);
     width:var(--btnW,180px);height:var(--btnH,64px);aspect-ratio:auto;
     padding:4px 8px;border-radius:28px;justify-content:center;text-align:center;gap:0;
@@ -627,7 +627,7 @@
 <body>
 <canvas id="c"></canvas>
 <div id="rotate" role="alert">
-  <svg viewBox="0 0 64 64" width="84" height="84" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="6" width="24" height="42" rx="4" transform="rotate(90 32 32)"/><path d="M10 52c4 6 10 8 16 8M26 60l-1-7M26 60l7-2"/></svg>
+  <svg viewBox="0 0 64 64" width="84" height="84"><rect x="19" y="8" width="26" height="48" rx="5" fill="currentColor"/></svg>
   <div>Поверни телефон горизонтально</div>
 </div>
 <div id="splash" class="splash intro">
