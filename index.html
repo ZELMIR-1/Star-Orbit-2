@@ -531,11 +531,107 @@
     .splash::before,.sp-title,.sp-bar i::after,
     .screen.menu h1,.menu-particle{animation:none !important}
   }
+
+  /* ============================================================
+     ГОРИЗОНТАЛЬНАЯ ВЕРСИЯ
+     ============================================================ */
+
+  /* просьба повернуть телефон */
+  #rotate{
+    position:fixed;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+    padding:24px;text-align:center;background:#060a14;color:var(--ink);
+    font:800 clamp(20px,6vw,28px)/1.25 var(--font);
+  }
+  #rotate svg{color:var(--sun);animation:rotHint 2s ease-in-out infinite}
+  @keyframes rotHint{0%,100%{transform:rotate(0)}50%{transform:rotate(-90deg)}}
+  @media (orientation:portrait) and (pointer:coarse){ #rotate{display:flex} }
+
+  /* видео-заставка вместо загрузки данных */
+  .splash.intro{background:#000}
+  .splash.intro::before{display:none}
+  .splash.intro .sp-co,.splash.intro .sp-main{display:none}
+  .splash.load .sp-vid{display:none}
+  .sp-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:1;pointer-events:none}
+
+  /* компактные экраны в альбомной ориентации */
+  @media (orientation:landscape){
+    .screen{padding:10px max(20px,env(safe-area-inset-right,0px)) 10px max(20px,env(safe-area-inset-left,0px))}
+    h1{font-size:clamp(26px,9vh,52px)}
+    h1.sm{font-size:clamp(24px,7.5vh,38px)}
+    .big{font-size:clamp(44px,17vh,96px);margin:2px 0}
+    .screen p{margin:6px 0 0;max-width:34em;font-size:clamp(13px,3.6vh,17px);line-height:1.3}
+    .primary{margin-top:12px;padding:10px 40px;font-size:clamp(17px,5vh,22px)}
+    .secondary{margin-top:8px;padding:8px 32px;font-size:clamp(15px,4.4vh,19px)}
+    .link{margin-top:8px;padding:6px 12px;font-size:16px}
+    .list{margin-top:8px;width:min(100%,640px)}
+    .invgrid{grid-template-columns:repeat(4,1fr)}
+    .slot .sk{width:52px;height:52px}
+    .card{padding:10px 14px;margin-bottom:8px}
+    .form-box{margin-top:10px;gap:8px}
+    .chips{margin-top:8px}
+    .code{margin-top:10px}
+    .row{gap:4px}
+    #arrows{bottom:calc(env(safe-area-inset-bottom,0px) + 18px);flex-direction:row-reverse;gap:14px}
+    .arrow{width:58px;height:58px}
+    #bestHud{
+      left:calc(env(safe-area-inset-left,0px) + 14px);right:auto;text-align:left;padding:0;
+      top:calc(env(safe-area-inset-top,0px) + 74px);font-size:14px;
+    }
+  }
+
+  /* главное меню: поле игры по центру без размытия, кнопки по краям */
+  .screen.menu{
+    background:transparent;
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+    padding:0;overflow:hidden;touch-action:none;
+  }
+  .screen.menu::before,.screen.menu::after{display:none}
+  .screen.menu > p{display:none}
+  .screen.menu h1{
+    position:absolute;left:0;right:0;margin:0;text-align:center;pointer-events:none;
+    top:calc(env(safe-area-inset-top,0px) + 8px);
+    font-size:clamp(20px,6.5vh,36px);
+  }
+  /* «Играть» — справа снизу */
+  .screen.menu #ovBtn{
+    position:absolute;margin:0;min-width:180px;min-height:64px;padding:10px 30px;
+    right:calc(env(safe-area-inset-right,0px) + 16px);
+    bottom:calc(env(safe-area-inset-bottom,0px) + 16px);
+    font-size:clamp(18px,5vh,24px);
+  }
+  /* «Режимы» — тот же размер, слева от «Играть» */
+  .screen.menu .link.modebtn{
+    left:auto;margin:0;
+    right:calc(env(safe-area-inset-right,0px) + 16px + var(--btnW,180px) + 12px);
+    bottom:calc(env(safe-area-inset-bottom,0px) + 16px);
+    width:var(--btnW,180px);height:var(--btnH,64px);aspect-ratio:auto;
+    padding:4px 8px;border-radius:28px;justify-content:center;text-align:center;gap:0;
+    flex-direction:column;align-items:center;
+  }
+  .screen.menu .link.modebtn small{font-size:11px;letter-spacing:.14em;line-height:1.2}
+  .screen.menu .link.modebtn b{margin-top:1px;font-size:14px;line-height:1.2;white-space:nowrap}
+  .screen.menu .link.modebtn em{margin-top:1px;font-size:11px;line-height:1.2;white-space:nowrap}
+  /* «Дорога славы» — по центру справа, «Инвентарь» — по центру слева */
+  .screen.menu .link.roadbtn,
+  .screen.menu .link.invbtn{
+    top:50%;margin:calc(var(--sb) * -.37) 0 0;
+  }
+  .screen.menu .link.roadbtn{right:calc(env(safe-area-inset-right,0px) + 14px);left:auto}
+  .screen.menu .link.invbtn{left:calc(env(safe-area-inset-left,0px) + 14px);right:auto}
+
+  /* модальное окно «Играть» */
+  .screen.modal{background:rgba(6,10,20,.62)}
+  .screen.modal .primary,.screen.modal .secondary{width:min(76vw,320px);padding-left:12px;padding-right:12px}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
+<div id="rotate" role="alert">
+  <svg viewBox="0 0 64 64" width="84" height="84" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="6" width="24" height="42" rx="4" transform="rotate(90 32 32)"/><path d="M10 52c4 6 10 8 16 8M26 60l-1-7M26 60l7-2"/></svg>
+  <div>Поверни телефон горизонтально</div>
+</div>
 <div id="splash" class="splash intro">
+  <video id="spVid" class="sp-vid" src="Textures/zelmir-company.mp4" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture></video>
   <div class="sp-co">ZELMIR COMPANY</div>
   <div class="sp-main">
     <div class="sp-title">Звезды с Орбиты</div>
@@ -827,13 +923,14 @@ function resize(){
   cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   S = Math.min(W, H * 0.92);
-  cx = W / 2; cy = H * 0.47;
+  cx = W / 2; cy = H * 0.5;
   R = radii(ORB);
   BAND = S * 0.05;
   PR = S * 0.03;
   if (G){ G.r = R[G.lane]; const p = pos(G.angle, G.r); G.px = p[0]; G.py = p[1]; G.trail.length = 0; }
   for (const o of opps) o.r = R[o.lane];
   fitMenu();
+  if (H > W && mode === 'play' && !multi) pauseGame();
 }
 
 /* ---------- Состояние ---------- */
@@ -1272,13 +1369,13 @@ function draw(){
   ctx.globalAlpha = 1;
 
   if (mode === 'play' && g.taps < 2 && g.t > 0.3){
-    ctx.font = '700 ' + Math.max(16, Math.round(S * 0.045)) + 'px ' + FONT;
+    const fs = Math.max(13, Math.round(S * 0.04));
+    ctx.font = '700 ' + fs + 'px ' + FONT;
     ctx.fillStyle = 'rgba(244,247,251,' + (0.55 + 0.35 * Math.sin(g.t * 5)) + ')';
-    const hy = H - Math.max(70, H * 0.09), fs = Math.max(16, Math.round(S * 0.045));
+    const hy = H - fs * (ORB === 2 ? 1.3 : 2.1);
     if (ORB === 2) ctx.fillText('Коснись экрана — смени орбиту', cx, hy);
     else {
-      ctx.fillText('Коснись нужной орбиты', cx, hy - fs * 0.75);
-      ctx.fillText('или жми стрелки справа', cx, hy + fs * 0.75);
+      ctx.fillText('Коснись нужной орбиты или жми стрелки', cx, hy);
     }
   }
 
@@ -1354,20 +1451,38 @@ function applyStaticUi(){
 }
 function fitMenu(){
   if (!ov.classList.contains('menu')) return;
-  const h = b => b.hidden ? 0 : b.offsetHeight;
-  const rh = h(ovBtn4), ih = h(ovBtn5), mh = h(ovBtn3);
-  ov.style.setProperty('--roadH', rh + 'px');
-  ov.style.setProperty('--cornerH', (rh + ih + 8) + 'px');
-  ov.style.setProperty('--modeH', mh + 'px');
+  // «Режимы» делаем ровно такого же размера, как «Играть»
+  const bw = ovBtn.offsetWidth, bh = ovBtn.offsetHeight;
+  if (bw > 40 && bh > 20){
+    ov.style.setProperty('--btnW', bw + 'px');
+    ov.style.setProperty('--btnH', bh + 'px');
+  }
 }
 
 const Loader = (() => {
   const el = document.getElementById('splash'), bar = document.getElementById('spBar'), info = document.getElementById('spInfo');
-  const L = { on: false, mode: 'intro', assets: 0, boot: 0, cur: 0, label: '', t0: Date.now(), min: 0, wantHide: false };
+  const vid = document.getElementById('spVid');
+  const L = { on: false, mode: 'intro', assets: 0, boot: 0, cur: 0, label: '', t0: Date.now(), min: 0, wantHide: false, vidDone: true };
   const target = () => L.mode === 'intro' ? 80 * L.assets + 20 * L.boot : 100 * L.boot;
+  // видео-заставка: пока играет ролик, данные грузятся в фоне
+  const startVid = () => {
+    const done = () => { L.vidDone = true; };
+    if (!vid){ done(); return; }
+    vid.addEventListener('ended', done, { once: true });
+    vid.addEventListener('error', done, { once: true });
+    const t = setTimeout(() => { if (vid.readyState < 2) done(); }, 10000);
+    vid.addEventListener('loadeddata', () => clearTimeout(t), { once: true });
+    try {
+      vid.muted = true;
+      const p = vid.play();
+      if (p && p.catch) p.catch(done);
+    } catch(e){ done(); }
+  };
   L.show = (mode, label) => {
     L.on = true; L.mode = mode; L.boot = 0; L.cur = 0; L.t0 = Date.now(); L.wantHide = false;
-    L.min = mode === 'intro' ? 2600 : 450;
+    L.vidDone = mode !== 'intro';
+    if (mode === 'intro') startVid();
+    L.min = mode === 'intro' ? 800 : 450;
     L.label = label || (mode === 'intro' ? 'Загрузка данных' : 'Загрузка');
     el.className = 'splash ' + mode; el.hidden = false;
     info.textContent = L.label + '… 0%'; bar.style.width = '0%';
@@ -1382,7 +1497,7 @@ const Loader = (() => {
     bar.style.width = L.cur.toFixed(1) + '%';
     const t = L.label + '… ' + Math.round(L.cur) + '%';
     if (info.textContent !== t) info.textContent = t;
-    if (L.wantHide && L.cur >= 99.5 && Date.now() - L.t0 >= L.min && (L.mode !== 'intro' || L.assets >= 1)){
+    if (L.wantHide && L.cur >= 99.5 && Date.now() - L.t0 >= L.min && L.vidDone && (L.mode !== 'intro' || L.assets >= 1)){
       L.on = false; el.classList.add('off');
       setTimeout(() => { if (!L.on) el.hidden = true; }, 500);
     }
@@ -1427,7 +1542,7 @@ function showOverlay(o){
   ovText.className = o.record ? 'record' : '';
   ovText.hidden = !o.text;
   ovInput.hidden = !o.input;
-  ovForm.innerHTML = ''; ovForm.hidden = !o.form; ov.classList.toggle('form', !!o.form); ov.classList.toggle('menu', !!o.menu); ov.scrollTop = 0;
+  ovForm.innerHTML = ''; ovForm.hidden = !o.form; ov.classList.toggle('form', !!o.form); ov.classList.toggle('menu', !!o.menu); ov.classList.toggle('modal', !!o.modal); ov.scrollTop = 0;
   if (o.form) o.form(ovForm);
   ovList.innerHTML = ''; ovList.className = 'list'; ovList.hidden = !o.list;
   if (o.list) o.list(ovList);
@@ -1453,17 +1568,25 @@ function showMenu(){
   if (ORB !== modeSel){ setOrbits(modeSel); newGame(); }
   showOverlay({
     menu: true,
-    after: () => { fitMenu(); requestAnimationFrame(fitMenu); },
+    after: () => { fitMenu(); requestAnimationFrame(fitMenu); setTimeout(fitMenu, 300); },
     title: 'Звезды с Орбиты',
-    text: 'Касайся экрана — корабль перепрыгнет на другую орбиту. Лови звёзды и обходи розовые дуги.',
-    btn: ['Играть', startGame],
-    btn6: ['Игра онлайн', startOnline],
-    btn2: ['Игра с другом', showLobbyChoice],
+    btn: ['Играть', showPlayModal],
     btn3: ['Режимы', showModes, 'modebtn',
-      modeIcon(modeSel) + '<span><small>Режимы</small><b>' + modeName(modeSel) + '</b><em>' + plLabel(plSel) + ' · Рекорд: ' + bests[modeSel] + '</em></span>',
+      '<small>Режимы</small><b>' + modeSel + ' орбиты · ' + plLabel(plSel) + '</b><em>Рекорд: ' + bests[modeSel] + '</em>',
       modeName(modeSel) + ' · ' + plLabel(plSel) + ' · Рекорд: ' + bests[modeSel]],
     btn4: ['Дорога славы', showRoad, 'roadbtn', ICON_ROAD + '<span>Дорога славы</span>'],
     btn5: ['Инвентарь', showInventory, 'invbtn', ICON_BAG + '<span>Инвентарь</span>']
+  });
+}
+function showPlayModal(){
+  mode = 'menu';
+  showOverlay({
+    modal: true,
+    title: 'Играть', small: true,
+    btn: ['Одиночная игра', startGame],
+    btn6: ['Игра онлайн', startOnline],
+    btn2: ['Игра с другом', showLobbyChoice],
+    btn3: ['Назад', showMenu]
   });
 }
 function toMenu(){
@@ -1835,7 +1958,7 @@ function showGift(gid, next){
   });
 }
 /* ---------- Пуш-уведомления ---------- */
-const VAPID_PUBLIC = 'BF0Lw48pnWUi9yAr8dOQkK9I24ubLkAc0QId_JYRBwy2Xj7boIKdeS3F5tdmvQx-bPH_GIF95JE25AZ0UU0yPvI';
+const VAPID_PUBLIC = 'BBOnyJtlPkAG7EoTi6XSTwOtY7vj6UUHMb4i_gN2y_u4ayrAX_qmpVw5tjjBwn9z4feFhxhieIRk7rjHp4hyD_8';
 const PUSH_FN = SUPABASE_URL + '/functions/v1/push';
 const pushOK = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
 const pushFlag = () => user ? 'orbit-push-' + user.id : 'orbit-push-none';
@@ -2801,6 +2924,10 @@ window.addEventListener('keydown', e => {
 document.addEventListener('visibilitychange', () => { if (document.hidden && !multi) pauseGame(); });
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('gesturestart', e => e.preventDefault());
+/* фиксируем альбомную ориентацию (работает в установленном PWA/полноэкранном режиме) */
+const lockLandscape = () => { try { const o = screen.orientation; if (o && o.lock) o.lock('landscape').catch(() => {}); } catch(e){} };
+window.addEventListener('pointerdown', lockLandscape, { once: true, capture: true });
+lockLandscape();
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', () => setTimeout(resize, 150));
 window.addEventListener('pagehide', () => { try { if (NET.ch && NET.client) NET.client.removeChannel(NET.ch); } catch(e){} });
